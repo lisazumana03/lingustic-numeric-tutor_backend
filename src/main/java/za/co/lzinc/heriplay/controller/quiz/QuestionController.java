@@ -27,4 +27,10 @@ public class QuestionController {
         questionService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/delete")
+    public ResponseEntity<Question> update(@RequestBody Question question) {
+        questionService.update(question);
+        return ResponseEntity.ok(question);
+    }
 }

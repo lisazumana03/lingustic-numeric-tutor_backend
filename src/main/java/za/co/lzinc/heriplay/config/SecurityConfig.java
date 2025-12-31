@@ -1,6 +1,8 @@
 package za.co.lzinc.heriplay.config;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,9 +21,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import lombok.RequiredArgsConstructor;
 import za.co.lzinc.heriplay.security.JwtAuthenticationFilter;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -32,72 +31,38 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
-    @ConditionalOnMissingBean(SecurityFilterChain.class) // only create this chain when none other exists
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints - no authentication required
-                        .requestMatchers("/api/authentication/register", "/api/authentication/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/authentication/register", "/api/authentication/login").permitAll()
+
+                        // Ensure profile endpoint is accessible to authenticated users
+                        .requestMatchers("/api/user/profile").authenticated()
 
                         // Admin-only endpoints for Users
-                        .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/users/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/users/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/user/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/user/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/user/**").hasRole("ADMIN")
 
                         // Admin-only endpoints for Subjects
                         .requestMatchers(HttpMethod.POST, "/api/subject/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/subject/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/subject/**").hasRole("ADMIN")
 
-                        // Admin-only endpoints for Insurance
-                        .requestMatchers(HttpMethod.POST, "/api/achievements/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/achievements/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/achievements/**")
-                        .hasRole("ADMIN")
-
-                        // Admin-only endpoints for Maintenance
-                        .requestMatchers(HttpMethod.POST, "/api/maintenance/**")
-                        .hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/maintenance/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/maintenance/**")
-                        .hasRole("ADMIN")
-
-                        // Admin-only endpoints for Maintenance
-                        .requestMatchers(HttpMethod.POST, "/api/maintenance/create").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/maintenance/update/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/maintenance/delete/**").hasRole("ADMIN")
-
-                        // Maintenance read access for all authenticated users
-                        .requestMatchers(HttpMethod.GET, "/api/maintenance/**").authenticated()
-
-                        // Admin-only endpoint for sending Notifications
-                        .requestMatchers(HttpMethod.POST, "/api/notifications/**")
-                        .hasRole("ADMIN")
-
-                        // Admin-only endpoint for locations
-                        .requestMatchers(HttpMethod.POST, "/api/location/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/location/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/location/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/location/delete/**").hasRole("ADMIN")
-
                         // Admin-only for admin panel
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-
-                        // Customer operations - all authenticated users can access
+                        
                         .requestMatchers("/api/subject/**").authenticated()
                         .requestMatchers("/api/quiz/**").authenticated()
-                        .requestMatchers("/api/achievements/**").authenticated()
-
-                        // Location read access for all authenticated users
+                        
                         .requestMatchers(HttpMethod.GET, "/api/quiz/**").authenticated()
 
-
-
                         // User profile management - users can manage their own profile
-                        .requestMatchers(HttpMethod.GET, "/api/users/**").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/api/users/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/user/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/user/**").authenticated()
 
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
@@ -112,8 +77,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:4516",
-                "http://172.20.10.9:4516"));
+                "http://localhost:4516", 
+                "http://192.168.0.20:4516"));
         configuration.setAllowedMethods(Arrays.asList(
                 "GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList(

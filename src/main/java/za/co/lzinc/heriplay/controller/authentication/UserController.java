@@ -22,7 +22,7 @@ import za.co.lzinc.heriplay.service.authenticator.impl.UserService;
 
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin(origins = {"http://localhost:4516", "http://172.20.10.9:4516"})
+@CrossOrigin(origins = {"http://localhost:4516", "http://192.168.0.20:4516"})
 public class UserController {
 
     @Autowired

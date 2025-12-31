@@ -10,13 +10,14 @@ import java.util.List;
 
 public class QuizFactory{
     public static Quiz createQuiz(String id, String title, String category,
-                                  int timeLimit, String description, Subject subject,
+                                  int timeLimit, int points, String description, Subject subject,
                                   List<Question> questions ){
         return new Quiz.Builder()
                 .setId(id)
                 .setTitle(title)
                 .setCategory(category)
                 .setTimeLimit(timeLimit)
+                .setPoints(points)
                 .setDescription(description)
                 .setSubject(subject)
                 .setQuestions(questions)

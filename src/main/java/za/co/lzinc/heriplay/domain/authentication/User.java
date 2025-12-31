@@ -29,12 +29,13 @@ public class User implements UserDetails {
     private int userId;
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "firstName", column = @Column(nullable = true)), // Allow null values
-        @AttributeOverride(name = "lastName", column = @Column(nullable = true))  // Allow null values
+        @AttributeOverride(name = "firstName", column = @Column(name = "first_name", nullable = true)),
+        @AttributeOverride(name = "lastName", column = @Column(name = "last_name", nullable = true))
     })
     private Name name; // Optional name field
     @Column(nullable = true, unique = true) // Allow null values for userName
     private String userName;
+    @Column(nullable = false, unique = true) // Ensure email is unique and not null
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
@@ -79,7 +80,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userName != null ? userName : email; // Fallback to email if username is null
+        return email; // Fallback to email if username is null
     }
 
     @Override

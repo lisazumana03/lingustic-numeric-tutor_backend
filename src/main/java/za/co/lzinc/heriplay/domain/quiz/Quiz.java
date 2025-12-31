@@ -1,13 +1,13 @@
 package za.co.lzinc.heriplay.domain.quiz;
 
+import java.io.Serializable;
+import java.util.List;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-
-import java.io.Serializable;
-import java.util.List;
-
 @Entity
 public class Quiz implements Serializable {
     @Id
@@ -15,6 +15,8 @@ public class Quiz implements Serializable {
     private String title;
     private String category;
     private int timeLimit; // in minutes
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int points;
     private String description;
     @ManyToOne
     private Subject subject;
@@ -29,6 +31,7 @@ public class Quiz implements Serializable {
         this.title = builder.title;
         this.category = builder.category;
         this.timeLimit = builder.timeLimit;
+        this.points = builder.points;
         this.description = builder.description;
         this.subject = builder.subject;
         this.questions = builder.questions;
@@ -54,6 +57,9 @@ public class Quiz implements Serializable {
         return timeLimit;
     }
 
+    public int getPoints() {
+        return points;
+    }
 
     public String getDescription() {
         return description;
@@ -72,6 +78,7 @@ public class Quiz implements Serializable {
         private String title;
         private String category;
         private int timeLimit; // in minutes
+        private int points;
         private String description;
         private Subject subject;
         private List<Question> questions;
@@ -96,6 +103,11 @@ public class Quiz implements Serializable {
             return this;
         }
 
+        public Builder setPoints(int points) {
+            this.points = points;
+            return this;
+        }
+
         public Builder setDescription(String description) {
             this.description = description;
             return this;
@@ -116,6 +128,7 @@ public class Quiz implements Serializable {
             this.title = quiz.title;
             this.category = quiz.category;
             this.timeLimit = quiz.timeLimit;
+            this.points = quiz.points;
             this.description = quiz.description;
             this.subject = quiz.subject;
             this.questions = quiz.questions;

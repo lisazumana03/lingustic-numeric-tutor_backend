@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HeriPlayApplication {
+public class LinguaNumTutApplication {
     public static void main(String[] args) {
-        SpringApplication.run(HeriPlayApplication.class, args);
+        SpringApplication.run(LinguaNumTutApplication.class, args);
     }
 }

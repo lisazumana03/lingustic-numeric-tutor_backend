@@ -8,6 +8,7 @@ public class Question {
     @Id
     private int questionId;
     private String question;
+    private int points;
     private String answer;
     private String correctAnswer;
 
@@ -28,6 +29,10 @@ public class Question {
         return question;
     }
 
+    public int getPoints() {
+        return points;
+    }
+
     public String getAnswer() {
         return answer;
     }
@@ -41,6 +46,7 @@ public class Question {
         return "Question{" +
                 "questionId=" + questionId +
                 ", question='" + question + '\'' +
+                ", points=" + points +
                 ", answer='" + answer + '\'' +
                 ", correctAnswer='" + correctAnswer + '\'' +
                 '}';
@@ -49,6 +55,7 @@ public class Question {
     public static class Builder{
         private int questionId;
         private String question;
+        private int points;
         private String answer;
         private String correctAnswer;
 
@@ -59,6 +66,11 @@ public class Question {
 
         public Builder setQuestion(String question){
             this.question = question;
+            return this;
+        }
+
+        public Builder setPoints(int points){
+            this.points = points;
             return this;
         }
 
@@ -75,6 +87,7 @@ public class Question {
         public Builder copy(Question question){
             this.questionId = question.questionId;
             this.question = question.question;
+            this.points = question.points;
             this.answer = question.answer;
             this.correctAnswer = question.correctAnswer;
             return this;

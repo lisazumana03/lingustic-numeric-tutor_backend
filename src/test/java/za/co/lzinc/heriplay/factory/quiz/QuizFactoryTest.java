@@ -18,11 +18,12 @@ class QuizFactoryTest {
         String title = "Math";
         String category = "Math";
         int timeLimit = 5;
+        int points = 5;
         String description = "Math";
         Subject subject = new Subject();
         List<Question> questionList = new ArrayList<>();
 
-        Quiz quiz = QuizFactory.createQuiz(id, title, category, timeLimit, description, subject, questionList);
+        Quiz quiz = QuizFactory.createQuiz(id, title, category, timeLimit, points, description, subject, questionList);
         assertNotNull(quiz);
         System.out.println(quiz);
 

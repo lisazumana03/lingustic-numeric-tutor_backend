@@ -10,10 +10,11 @@ class QuestionFactoryTest {
     @Test
     void createQuestion() {
         String question = "What is thte number?";
+        int points = 5;
         String answer = "A";
         String correctAnswer = "A";
 
-        Question question1 = QuestionFactory.createQuestion(question, answer, correctAnswer);
+        Question question1 = QuestionFactory.createQuestion(question, points, answer, correctAnswer);
         assertNotNull(question1);
         System.out.println(question1);
     }

@@ -1,13 +1,16 @@
 package za.co.lzinc.heriplay.domain;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class Name {
-    @Column(nullable = true) // Allow null values
+public class Name implements ValueObject, Serializable {
+    @Column(name = "first_name", nullable = true) // Allow null values
     private String firstName;
-    @Column(nullable = true) // Allow null values
+
+    @Column(name = "last_name", nullable = true) // Allow null values
     private String lastName;
 
     public Name(String firstName, String lastName) {

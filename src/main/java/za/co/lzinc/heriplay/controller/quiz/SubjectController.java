@@ -29,12 +29,7 @@ public class SubjectController {
 
     @GetMapping("/all")
     public ResponseEntity<List<Subject>> getAllSubjects() {
-        List<Subject> subjects = subjectService.readAll();
-
-        // Log the subjects for debugging
-        System.out.println("Subjects fetched: " + subjects);
-
-        return ResponseEntity.ok(subjects);
+            return ResponseEntity.ok(subjectService.readAll());
     }
 
     @GetMapping("/{subjectId}")

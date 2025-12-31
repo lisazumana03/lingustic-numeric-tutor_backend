@@ -33,11 +33,11 @@ public class QuestionService implements IQuestionService {
 
     @Override
     public Question readById(Integer integer) {
-        return null;
+        return questionRepository.findById(integer).orElse(null);
     }
 
     @Override
     public Question update(Question question) {
-        return null;
+        return questionRepository.save(question);
     }
 }

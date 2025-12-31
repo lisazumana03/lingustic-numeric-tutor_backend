@@ -12,6 +12,7 @@ public class QuizDTO implements Serializable {
     private String title;
     private String category;
     private int timeLimit; // in minutes
+    private int points;
     private String description;
     private Subject subject;
     private List<Question> questions;
@@ -23,6 +24,7 @@ public class QuizDTO implements Serializable {
         this.title = quiz.getTitle();
         this.category = quiz.getCategory();
         this.timeLimit = quiz.getTimeLimit();
+        this.points = quiz.getPoints();
         this.description = quiz.getDescription();
         this.subject = quiz.getSubject();
         this.questions = quiz.getQuestions();
@@ -58,6 +60,14 @@ public class QuizDTO implements Serializable {
 
     public void setTimeLimit(int timeLimit) {
         this.timeLimit = timeLimit;
+    }
+
+    public int getPoints(){
+        return points;
+    }
+
+    public void setPoints(int points){
+        this.points = points;
     }
 
     public String getDescription() {

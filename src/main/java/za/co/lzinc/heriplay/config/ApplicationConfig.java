@@ -21,7 +21,7 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return email -> authenticationRepository.findByEmail(email)
+        return username -> authenticationRepository.findByEmail(username)
                 .map(user -> {
                     // Convert user role to Spring Security authority with ROLE_ prefix
                     org.springframework.security.core.authority.SimpleGrantedAuthority authority =
@@ -33,7 +33,7 @@ public class ApplicationConfig {
                             java.util.Collections.singletonList(authority)
                     );
                 })
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
     }
 
     @Bean

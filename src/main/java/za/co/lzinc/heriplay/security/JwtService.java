@@ -27,7 +27,6 @@ public class JwtService {
     public String extractUsername(String jwtToken) {
         //This method extracts the username (subject) from the JWT token
         return extractClaim(jwtToken, Claims::getSubject);
-
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -36,7 +35,7 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails) {
-        return generateToken(Map.of(), userDetails);
+        return generateToken(Map.of("role", userDetails.getAuthorities().iterator().next().getAuthority()), userDetails);
     }
 
     public String generateToken(
@@ -74,11 +73,11 @@ public class JwtService {
 
     // Method to extract all claims from the JWT token
     private Claims extractAllClaims(String jwtToken) {
-        return Jwts.parser() 
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(jwtToken)
-                .getPayload();
+        return Jwts.parser()
+        .verifyWith(getSigningKey())
+        .build()
+        .parseSignedClaims(jwtToken)
+        .getPayload();
     }
 
     // The secret key is used to sign and verify the JWT tokens

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import za.co.lzinc.heriplay.domain.Name;
+import za.co.lzinc.heriplay.domain.authentication.Role;
 import za.co.lzinc.heriplay.domain.authentication.User;
 import za.co.lzinc.heriplay.dto.authentication.AuthenticationRequest;
 import za.co.lzinc.heriplay.dto.authentication.LoginRequestDTO;
@@ -29,19 +30,21 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationRequest register(RegisterRequestDTO request) {
-        Name name = request.name() != null ? request.name() : new Name("", ""); // Default to empty Name if null
+        Name name = request.name() != null ? request.name() : new Name("DefaultFirstName", "DefaultLastName"); // Ensure name is not null
         String userName = request.userName() != null && !request.userName().trim().isEmpty() ? request.userName().trim() : null;
 
         if (userName != null && authenticationRepository.findByUserName(userName).isPresent()) {
-            throw new IllegalArgumentException("Username already exists");
+            throw new IllegalArgumentException("Email already exists");
         }
+
+        Role role = request.role() != null ? request.role() : Role.USER; // Assign default role if null
 
         User user = new User.Builder()
                 .setName(name) // Optional name
                 .setUserName(userName) // Optional username
                 .setEmail(request.email())
                 .setPassword(passwordEncoder.encode(request.password()))
-                .setRole(request.role())
+                .setRole(role)
                 .build();
 
         authenticationRepository.save(user);
