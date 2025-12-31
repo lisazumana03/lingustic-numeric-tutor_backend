@@ -20,7 +20,7 @@ public class SubjectController {
     @Autowired
     private SubjectService subjectService;
 
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<Subject> create(@RequestBody Subject subject) {
         Subject createdSubject = subjectService.create(subject);
@@ -30,6 +30,10 @@ public class SubjectController {
     @GetMapping("/all")
     public ResponseEntity<List<Subject>> getAllSubjects() {
         List<Subject> subjects = subjectService.readAll();
+
+        // Log the subjects for debugging
+        System.out.println("Subjects fetched: " + subjects);
+
         return ResponseEntity.ok(subjects);
     }
 
@@ -52,7 +56,7 @@ public class SubjectController {
         return ResponseEntity.notFound().build();
     }
 
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{subjectId}")
     public ResponseEntity<Void> deleteSubject(@PathVariable Integer subjectId) {
         subjectService.delete(subjectId);

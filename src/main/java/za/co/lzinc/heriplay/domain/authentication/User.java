@@ -25,6 +25,7 @@ import za.co.lzinc.heriplay.domain.Name;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id", nullable = false) // Ensure userId maps to user_id and is not null
     private int userId;
     @Embedded
     @AttributeOverrides({

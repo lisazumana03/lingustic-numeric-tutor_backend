@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import za.co.lzinc.heriplay.domain.authentication.User;
 import za.co.lzinc.heriplay.domain.feedback.Review;
+import za.co.lzinc.heriplay.repository.authentication.AuthenticationRepository;
 import za.co.lzinc.heriplay.service.feedback.impl.ReviewService;
 
 @RestController
@@ -22,11 +24,27 @@ public class ReviewController {
     @Autowired
     private ReviewService reviewService;
 
+    @Autowired
+    private AuthenticationRepository authenticationRepository;
+
     @PostMapping
     public ResponseEntity<Review> create(@RequestBody Review review) {
         if (review.getUser() == null || review.getUser().getUserId() <= 0) {
             return ResponseEntity.badRequest().body(null); // Ensure userId is not null
         }
+
+        User user = authenticationRepository.findById(review.getUser().getUserId())
+                .orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null); // User not found
+        }
+
+        review = new Review.Builder()
+                .setRating(review.getRating())
+                .setDescription(review.getDescription())
+                .setUser(user)
+                .build();
+
         Review createdReview = reviewService.create(review);
         return ResponseEntity.ok(createdReview);
     }
